@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: bookinfo-dev-ratings
+  namespace: workshop-[X]-bookinfo-dev
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - workshop-[X]-bookinfo-dev.devops.ntplc.co.th
+    secretName: wildcard-cert-opstella-tls
+  rules:
+  - host: workshop-[X]-bookinfo-dev.devops.ntplc.co.th
+    http:
+      paths:
+      - path: /ratings(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: bookinfo-dev-ratings
+            port:
+              number: 8080
